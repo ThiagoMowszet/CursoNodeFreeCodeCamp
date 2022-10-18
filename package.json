@@ -1,0 +1,22 @@
+{
+  "name": "servidor-express",
+  "version": "1.0.0",
+  "description": "Mi primer servidor creado con express",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoMowszet/CursoNodeFreeCodeCamp.git"
+  },
+  "author": "Thiago",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThiagoMowszet/CursoNodeFreeCodeCamp/issues"
+  },
+  "homepage": "https://github.com/ThiagoMowszet/CursoNodeFreeCodeCamp#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

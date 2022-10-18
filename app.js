@@ -1,96 +1,91 @@
-// Que | Donde | Como 
+const express = require('express')
+const app = express()
 
-// Metodo + Path  + Como manejarlo
-
-// Si recibes una solicitud GET en /cursos..., haz esto
-// Si recibes una solicitud POST en /cursos..., haz esto
-// Si recibes una solicitud GET en /ejemplo..., haz esto
-
-
-const http = require('http')
 const {infoCursos} = require('./cursos.js')
 
-const servidor = http.createServer((req, res) => {
 
-    const { method } = req
+// Routers 
 
-    switch (method) {
-        case 'GET':
-            return manejarSolicitudGET(req, res)
-        case 'POST':
-            return manejarSolicitudPOST(req, res)
-        default:
-            res.statusCode = 501
-            console.log(`El metodo no puede ser manejado por el servidor: ${method}`)
-            break
-    }
+// Programacion
+const routerProgramacion = express.Router()
 
+app.use('/api/cursos/programacion', routerProgramacion)
+
+
+// Matematicas 
+
+const routerMatematicas = express.Router()
+app.use('/api/cursos/matematicas', routerMatematicas)
+
+
+
+// Routing
+
+app.get('/', (req, res) => {
+    res.send('Mi primer servidor')
+})
+
+app.get('/api/cursos', (req, res) => {
+    res.send(JSON.stringify(infoCursos))    
+})
+
+routerProgramacion.get('/', (req, res) => {
+    res.send(JSON.stringify(infoCursos.programacion))
+})
+
+routerMatematicas.get('/', (req, res) => {
+    res.send(infoCursos.matematicas)
 })
 
 
-const manejarSolicitudGET = (req, res) => {
-    const path = req.url
+// Parametros de Ruta
 
-    console.log(req.url);
-
-    console.log(res.statusCode) // 200 - OK
-
-    if (path === '/') {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.end('Bienvenidos a mi primer servidor y API, creados con Node.js')
-    } else if (path === '/api/cursos') {
-        return res.end(JSON.stringify(infoCursos))
-    } else if (path === '/api/cursos/programacion') {
-        return res.end(JSON.stringify(infoCursos.programacion))
-    } else if (path === '/api/cursos/matematicas') {
-        return res.end(JSON.stringify(infoCursos.matematicas))
-    } else {
-        res.statusCode = 404
-        res.end('El recurso solicitado no existe...')
+routerProgramacion.get('/:lenguaje', (req, res) => {
+    const lenguaje = req.params.lenguaje
+    const resultados = infoCursos.programacion.filter(curso => curso.lenguaje === lenguaje)
+    if (resultados.length === 0){
+        return res.status(404).send(`No se encontraron cursos de ${lenguaje}`)
     }
 
-}
+    // Parametros Query
+    console.log(req.query.ordenar);
 
-
-const manejarSolicitudPOST = (req, res) => {
-
-    const path = req.url
-
-    console.log(res.statusCode);
-
-    if (path === '/api/cursos/programacion') {
-        // esto es sin express (solo para fines practicos)
-
-        let body = ''
-
-        req.on('data', content => {
-            // body = body + content.toString()
-            body += content.toString()
-        })
-
-
-        req.on('end', () => {
-            console.log(body); 
-            console.log(typeof body);
-
-            // Convertir a un objeto de JS 
-            body = JSON.parse(body)
-
-
-            console.log(typeof body)
-            console.log(body.titulo);
-
-            return res.end('El servidor recibio una solicitud POST para /api/cursos/programacion')
-        })
-        
-
+    if(req.query.ordenar === 'vistas'){
+        return res.send(JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)))
     }
 
-}
+
+    res.send(JSON.stringify(resultados))
+})
 
 
-const PORT = 5000
+routerMatematicas.get('/:tema', (req, res) => {
+    const tema = req.params.tema
+    const resultados = infoCursos.matematicas.filter(a => a.tema === tema)
+    if (resultados.length === 0){
+        return res.status(404).send(`No se encontraron temas de ${tema}`)
+    }
 
-servidor.listen(PORT, () => {
-    console.log(`El servidor esta ejecutandose en el puerto ${PORT}`);
+    res.send(JSON.stringify(resultados))
+})
+
+// +1 parametro
+
+routerProgramacion.get('/:lenguaje/:nivel', (req, res) => {
+    const lenguaje = req.params.lenguaje
+    const nivel = req.params.nivel
+    
+    const resultados = infoCursos.programacion.filter(a => a.lenguaje === lenguaje && a.nivel === nivel)
+    if(resultados.length === 0) {
+        return res.status(404).send(`No se encontraron cursos de ${lenguaje} con el nivel ${nivel}`)
+    }
+})
+
+
+
+
+const PORT = process.env.PORT || 5000
+
+app.listen(PORT, () => {
+    console.log(`El servidor se esta ejecutando en el puerto ${PORT}...`);
 })
