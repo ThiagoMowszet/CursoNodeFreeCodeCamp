@@ -168,7 +168,7 @@ console.log('despues de eliminar todo');
 
 
 
-const curso = require('./curso.json')
+const curso = require('../curso.json')
 
 console.log(curso);
 
@@ -393,7 +393,7 @@ console.log(miURL.searchParams.get('nivel')) // 1
 const http = require('http')
 const { infoCursos } = require('./cursos.js')
 
-const servidor = http.createServer((req, res) => {
+const servidor2 = http.createServer((req, res) => {
 
     const { method } = req
 

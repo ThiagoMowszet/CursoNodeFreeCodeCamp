@@ -1,5 +1,5 @@
 let infoCursos = {
-  'programacion': [
+  programacion: [
     {
       id: 1,
       titulo: 'Aprende Python',
@@ -22,7 +22,7 @@ let infoCursos = {
       nivel: 'basico'
     }
   ],
-  'matematicas': [
+  matematicas: [
     {
       id: 1,
       titulo: 'Aprende Calculo',
@@ -37,7 +37,7 @@ let infoCursos = {
       vistas: 15722,
       nivel: 'intermedio'
     }
-  ]
+  ]    
 }
 
 module.exports.infoCursos = infoCursos;
