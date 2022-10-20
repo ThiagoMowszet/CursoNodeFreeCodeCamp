@@ -18,3 +18,30 @@ Content-Type: application/json
 {
     "titulo": "Aprende Node.js"
 }
+
+
+###
+
+POST http://localhost:5000/api/cursos/programacion HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": 4,
+    "titulo": "Aprende Node.js",
+    "lenguaje": "javascript",
+    "vistas": 45676,
+    "nivel": "basico"
+}
+
+###
+
+PUT http://localhost:5000/api/cursos/programacion/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": 2,
+    "titulo": "Python intermedio con proyectos",
+    "lenguaje": "python",
+    "vistas": 12399,
+    "nivel": "intermedio"
+}
