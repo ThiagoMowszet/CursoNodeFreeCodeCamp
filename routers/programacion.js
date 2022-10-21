@@ -1,3 +1,4 @@
+const { json } = require('express');
 const express = require('express')
 const { programacion } = require('../datos/cursos.js').infoCursos
 const routerProgramacion = express.Router()
@@ -55,6 +56,32 @@ routerProgramacion.put('/:id', (req, res) => {
     if (indice >= 0) {
         programacion[indice] = cursoActualizado
     }
+    res.send(JSON.stringify(programacion))
+})
+
+
+routerProgramacion.patch('/:id', (req, res) => {
+    
+    const infoActualizada = req.body
+    const id = req.params.id
+    const indice = programacion.findIndex(curso => curso.id == id)
+
+    if (indice >= 0) {
+        const cursoAModificar = programacion[indice]
+        Object.assign(cursoAModificar, infoActualizada)        
+    }
+    res.send(JSON.stringify(programacion))
+})
+
+
+routerProgramacion.delete('/:id', (req, res) => {
+    const id = req.params.id
+    const indice = programacion.findIndex(curso => curso.id == id)
+
+    if (indice >= 0) {
+        programacion.splice(indice, 1)
+    }
+
     res.send(JSON.stringify(programacion))
 })
 
